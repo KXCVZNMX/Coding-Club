@@ -1,12 +1,8 @@
-"""
-Typing Game
-"""
-
 from app import *
 
 def main():
     app = App()
-    app.run()
+    run(app)
 
 if __name__ == '__main__':
     main()

@@ -1,16 +1,9 @@
+import random
 import pygame
 from pygame.locals import *
 
-WORD_LIST = [
-    "python", "game", "keyboard", "program", "typing",
-    "speed", "challenge", "developer", "puzzle", "victory",
-    "keyboard", "algorithm", "function", "variable", "syntax",
-    "loop", "class", "object", "module", "library",
-    "pygame", "surface", "event", "render", "display",
-    "pixel", "vector", "sprite", "collision", "animation",
-    "sound", "music", "effect", "control", "player",
-    "score", "level", "difficulty", "progress", "achievement"
-]
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
 
 class App:
     def __init__(self):
@@ -20,32 +13,79 @@ class App:
         self.window = pygame.display.set_mode(self.size)
         self.background_color = (0, 0, 0)
         self.game_over = False #is the game over?
-        self.current_input = ""
+        self.pos = [400, 490]
+        self.speed = 5
+        self.rect_size = (self.rect_width, self.rect_height) = (50, 50)
 
-    def run(self):
-        pygame.init()
-        pygame.display.set_caption('App')
+    def is_running(self) -> bool:
+        return self._running
 
-        while self._running:
-            for event in pygame.event.get():
-                if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
-                    self._running = False
+    def stop_running(self):
+        self._running = False
 
-                if event.type == KEYDOWN:
-                    if self.game_over:
-                        # give option to reset
-                        pass
+class Object:
+    def __init__(self, width: int, height: int, posx: int, posy: int, speed: int):
+        self.rect_size = (self.rect_width, self.rect_height) = (width, height)
+        self.color = (255, 255, 255)
+        self.speed = speed
+        self.pos = [posx, posy]
 
-                    else:
-                        if event.key == K_RETURN:
-                            #check input here, and if check input returns
-                            #false, make self.game_over = True, else pass
-                            self.current_input = ""
+    def update(self):
+        self.pos[1] += self.speed
 
-                        elif event.key == K_BACKSPACE:
-                            self.current_input = self.current_input[:-1]
+    def draw(self, surface):
+        pygame.draw.rect(surface, self.color, (self.pos[0], self.pos[1], self.rect_width, self.rect_height), border_radius=6)
 
-                        elif
+    def is_out(self, app: App) -> bool:
+        return self.pos[1] > app.height + self.rect_height
 
+def generate_object(app: App) -> Object:
+    width = random.randint(30, 100)
+    height = random.randint(30, 100)
+    x = random.randint(0, app.width - width)
+    y = -height - random.randint(0, 200)
+    speed = 5
+    return Object(width, height, x, y, speed)
 
-            self.window.fill((0, 0, 0))
+def run(app: App) -> None:
+    pygame.init()
+    pygame.display.set_caption('App')
+
+    falling_rects = []
+
+    clock = pygame.time.Clock()
+
+    while app.is_running():
+        for event in pygame.event.get():
+            if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
+                app.stop_running()
+
+        keys = pygame.key.get_pressed()
+
+        for rect in falling_rects:
+            rect.update()
+
+        falling_rects = [rect for rect in falling_rects if not rect.is_out(app)]
+
+        if random.random() < 0.075:
+            falling_rects.append(generate_object(app))
+
+        if keys[K_LEFT]:
+            app.pos[0] = max(0, app.pos[0] - app.speed)
+        if keys[K_RIGHT]:
+            app.pos[0] = min(app.width - app.rect_width, app.pos[0] + app.speed)
+        if keys[K_UP]:
+            app.pos[1] = max(0, app.pos[1] - app.speed)
+        if keys[K_DOWN]:
+            app.pos[1] = min(app.height - app.rect_height, app.pos[1] + app.speed)
+
+        app.window.fill(app.background_color)
+
+        for rect in falling_rects:
+            rect.draw(app.window)
+
+        pygame.draw.rect(app.window, GREEN, (app.pos[0], app.pos[1], app.rect_width, app.rect_height))
+
+        pygame.display.flip()
+
+        clock.tick(60)
