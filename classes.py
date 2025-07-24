@@ -24,8 +24,6 @@ class App:
         self.score = 0
         self.rect_size = (self.rect_width, self.rect_height) = (50, 50)
 
-    # def update_centre(self):
-    #     self.centre = (self.pos[0] + self.rect_width / 2, self.pos[1] + self.rect_height / 2)
 
 class Player:
     def __init__(self):
@@ -35,7 +33,7 @@ class Player:
 
     def draw(self, window, app):
         print(self.pos, app.rect_width, app.rect_height)
-        pygame.draw.rect(window, self.color, (*self.pos, app.rect_width, app.rect_height)) # idfk why ts needs a pointer
+        pygame.draw.rect(window, self.color, (self.pos[0], self.pos[1], app.rect_width, app.rect_height))
 
 
 class Block(pygame.sprite.Sprite):
