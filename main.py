@@ -1,8 +1,7 @@
-from app import *
+from logic import *
 
 def main():
-    app = App()
-    run(app)
+    run(App())
 
 if __name__ == '__main__':
     main()
