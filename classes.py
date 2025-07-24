@@ -8,10 +8,9 @@ class App:
         self.window = pygame.display.set_mode(self.size)
         self.background_color = (0, 0, 0)
         self.game_over = False  #is the game over?
-        self.pos = [400, 490]
-        self.speed = 5
+        self.score = 0
         self.rect_size = (self.rect_width, self.rect_height) = (50, 50)
-        self.centre = (self.centre_x, self.centre_y) = (self.pos[0] + self.rect_width / 2, self.pos[1] + self.rect_height / 2)
+        # self.centre = (self.centre_x, self.centre_y) = (self.pos[0] + self.rect_width / 2, self.pos[1] + self.rect_height / 2)
 
     def is_running(self) -> bool:
         return self._running
@@ -19,8 +18,26 @@ class App:
     def stop_running(self):
         self._running = False
 
-    def update_centre(self):
-        self.centre = (self.pos[0] + self.rect_width / 2, self.pos[1] + self.rect_height / 2)
+    def reset(self):
+        self.size = (self.width, self.height) = (800, 500)
+        self.window = pygame.display.set_mode(self.size)
+        self.background_color = (0, 0, 0)
+        self.game_over = False  #is the game over?
+        self.score = 0
+        self.rect_size = (self.rect_width, self.rect_height) = (50, 50)
+
+    # def update_centre(self):
+    #     self.centre = (self.pos[0] + self.rect_width / 2, self.pos[1] + self.rect_height / 2)
+
+class Player:
+    def __init__(self):
+        self.pos = [400, 490]
+        self.speed = 5
+        self.color = (0, 255, 0)
+
+    def draw(self, window, app):
+        print(self.pos, app.rect_width, app.rect_height)
+        pygame.draw.rect(window, self.color, (*self.pos, app.rect_width, app.rect_height)) # idfk why ts needs a pointer
 
 
 class Block(pygame.sprite.Sprite):
