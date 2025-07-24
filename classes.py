@@ -3,14 +3,12 @@ import pygame
 class App:
     def __init__(self):
         self._running = True
-        self._display_surface = None
         self.size = (self.width, self.height) = (800, 500)
         self.window = pygame.display.set_mode(self.size)
         self.background_color = (0, 0, 0)
         self.game_over = False  #is the game over?
         self.score = 0
         self.rect_size = (self.rect_width, self.rect_height) = (50, 50)
-        # self.centre = (self.centre_x, self.centre_y) = (self.pos[0] + self.rect_width / 2, self.pos[1] + self.rect_height / 2)
 
     def is_running(self) -> bool:
         return self._running
