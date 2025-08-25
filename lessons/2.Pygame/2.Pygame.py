@@ -11,11 +11,12 @@ pygame.display.set_caption("My Window")
 
 pos = [400, 300]
 
-running = True
-while running:
+clock = pygame.time.Clock()
+
+while True:
     for event in pygame.event.get():
         if event.type == QUIT:
-            running = False
+            pygame.quit()
 
     keys = pygame.key.get_pressed()
     if keys[K_UP]:
@@ -32,4 +33,4 @@ while running:
     pygame.draw.rect(window, WHITE, (pos[0], pos[1], 50, 50))
     pygame.display.flip()
 
-pygame.quit()
+    clock.tick(60)
